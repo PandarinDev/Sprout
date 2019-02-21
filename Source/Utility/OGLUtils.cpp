@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-namespace winter {
+namespace sprout {
 
 	std::string OGLUtils::translateErrorCode(GLenum error) {
 		switch (error) {

@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-namespace winter {
+namespace sprout {
 
     std::vector<std::string> StringUtils::split(const std::string& input, char delimiter) {
         std::stringstream inputStream(input);

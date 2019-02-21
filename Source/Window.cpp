@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-namespace winter {
+namespace sprout {
 
 	Window::Window(const std::string& title, int width, int height, bool vSync, bool fullScreen)
 		: title(title), width(width), height(height), vSync(vSync), fullScreen(fullScreen) {

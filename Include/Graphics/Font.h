@@ -11,9 +11,9 @@
 namespace std {
 
     template<>
-    struct hash<std::pair<winter::FontChar::Id, winter::FontChar::Id>> {
+    struct hash<std::pair<sprout::FontChar::Id, sprout::FontChar::Id>> {
 
-        std::size_t operator()(const std::pair<winter::FontChar::Id, winter::FontChar::Id>& k) const {
+        std::size_t operator()(const std::pair<sprout::FontChar::Id, sprout::FontChar::Id>& k) const {
             std::size_t hash = 5;
             hash = 29 * hash + k.first;
             hash = 29 * hash + k.second;
@@ -24,7 +24,7 @@ namespace std {
 
 }
 
-namespace winter {
+namespace sprout {
 
     class Font final {
 

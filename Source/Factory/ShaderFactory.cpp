@@ -3,7 +3,7 @@
 
 #include <stdexcept>
 
-namespace winter {
+namespace sprout {
 	
 	std::unique_ptr<Shader> ShaderFactory::createFromSource(ShaderType type, const std::string& source) {
 		GLuint handle = glCreateShader(TypeUtils::enumValue(type));

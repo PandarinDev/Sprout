@@ -3,7 +3,7 @@
 #include <fstream>
 #include <stdexcept>
 
-namespace winter {
+namespace sprout {
 
 	std::string FileUtils::getParent(const std::string& filePath) {
 		return filePath.substr(0, filePath.find_last_of('/'));

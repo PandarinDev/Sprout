@@ -1,62 +1,44 @@
 #include "Graphics/Camera.h"
 
-#include <glm/gtc/matrix_transform.hpp>
+namespace sprout {
 
-#include <algorithm>
+    Camera::Camera(const glm::vec2& position) :
+        position(position), rotationDeg(0.0f), zoomPercent(1.0f) {}
 
-namespace winter {
-
-    const glm::vec3 Camera::WORLD_UP(0.0f, 1.0f, 0.0f);
-
-    Camera::Camera(const glm::vec3& position) :
-        position(position),
-		direction(glm::vec3(0.0f, 0.0f, -1.0f)),
-		right(glm::vec3(1.0f, 0.0f, 0.0f)),
-        up(WORLD_UP),
-        pitch(0.0f), yaw(0.0f) {}
-
-    void Camera::translate(const glm::vec3& translation) {
+    void Camera::translate(const glm::vec2& translation) {
         position += translation;
     }
 
-    void Camera::rotate(float pitch, float yaw) {
-        this->pitch = std::clamp(this->pitch + pitch, -89.0f, 89.0f);
-        this->yaw = glm::mod(this->yaw + yaw, 360.0f);
-		direction = glm::normalize(glm::vec3(
-			cos(glm::radians(this->pitch)) * cos(glm::radians(this->yaw)),
-			sin(glm::radians(this->pitch)),
-			cos(glm::radians(this->pitch)) * sin(glm::radians(this->yaw))
-		));
-        right = glm::cross(direction, WORLD_UP);
-        up = glm::cross(right, direction);
+    void Camera::rotate(float degrees) {
+        rotationDeg += degrees;
     }
 
-	void Camera::setDirection(const glm::vec3& direction) {
-		this->direction = direction;
-	}
+    void Camera::zoom(float percent) {
+        zoomPercent += percent;
+    }
 
-	void Camera::setRight(const glm::vec3& right) {
-		this->right = right;
-	}
-
-    const glm::vec3& Camera::getPosition() const {
+    const glm::vec2& Camera::getPosition() const {
         return position;
     }
 
-    const glm::vec3& Camera::getDirection() const {
-        return direction;
+    float Camera::getRotationDegrees() const {
+        return rotationDeg;
     }
 
-	const glm::vec3& Camera::getRight() const {
-		return right;
-	}
-
-	const glm::vec3& Camera::getUp() const {
-        return up;
+    float Camera::getZoom() const {
+        return zoomPercent;
     }
 
-    glm::mat4 Camera::calculateTransformationMatrix() const {
-        return glm::lookAt(position, position + direction, up);
+    void Camera::setPosition(const glm::vec2& position) {
+        this->position = position;
+    }
+
+    void Camera::setRotationDegrees(float rotationDeg) {
+        this->rotationDeg = rotationDeg;
+    }
+
+    void Camera::setZoom(float zoomPercent) {
+        this->zoomPercent = zoomPercent;
     }
 
 }

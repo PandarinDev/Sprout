@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace winter {
+namespace sprout {
 
     struct Configuration final {
         // Window configuration

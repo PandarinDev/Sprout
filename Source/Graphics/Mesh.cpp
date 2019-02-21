@@ -2,7 +2,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace winter {
+namespace sprout {
 
     Mesh::Mesh(GLuint vertexArrayObject, GLuint vertexBufferObject, std::size_t numIndices) :
         vertexArrayObject(vertexArrayObject), vertexBufferObject(vertexBufferObject),

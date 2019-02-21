@@ -6,7 +6,7 @@
 
 #include <memory>
 
-namespace winter {
+namespace sprout {
 
 	struct FramebufferFactory final {
 

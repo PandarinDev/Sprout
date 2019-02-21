@@ -1,6 +1,6 @@
 #include "Graphics/Text.h"
 
-namespace winter {
+namespace sprout {
 
 	Text::Text(std::unique_ptr<Mesh> mesh, std::shared_ptr<Texture> texture) :
 		mesh(std::move(mesh)), texture(texture) {}

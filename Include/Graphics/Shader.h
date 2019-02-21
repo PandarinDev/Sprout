@@ -2,7 +2,7 @@
 
 #include "External/glad.h"
 
-namespace winter {
+namespace sprout {
 
 	class Shader final {
 

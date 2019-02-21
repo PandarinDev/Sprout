@@ -3,33 +3,15 @@
 
 #include <stdexcept>
 
-namespace winter {
+namespace sprout {
 
-	constexpr const char* ShaderProgramFactory::defaultVS_2D;
-	constexpr const char* ShaderProgramFactory::defaultFS_2D;
-	constexpr const char* ShaderProgramFactory::defaultVS_3D;
-	constexpr const char* ShaderProgramFactory::defaultFS_3D;
-	constexpr const char* ShaderProgramFactory::defaultVS_GBuffer;
-	constexpr const char* ShaderProgramFactory::defaultFS_GBuffer;
+	constexpr const char* ShaderProgramFactory::defaultVS;
+	constexpr const char* ShaderProgramFactory::defaultFS;
 
-	std::unique_ptr<ShaderProgram> ShaderProgramFactory::createDefault2DProgram() {
+	std::unique_ptr<ShaderProgram> ShaderProgramFactory::createDefaultProgram() {
 		std::vector<std::unique_ptr<Shader>> shaders;
-		shaders.emplace_back(ShaderFactory::createFromSource(ShaderType::VERTEX_SHADER, defaultVS_2D));
-		shaders.emplace_back(ShaderFactory::createFromSource(ShaderType::FRAGMENT_SHADER, defaultFS_2D));
-		return createFromShaders(shaders);
-	}
-
-	std::unique_ptr<ShaderProgram> ShaderProgramFactory::createDefault3DProgram() {
-		std::vector<std::unique_ptr<Shader>> shaders;
-		shaders.emplace_back(ShaderFactory::createFromSource(ShaderType::VERTEX_SHADER, defaultVS_3D));
-		shaders.emplace_back(ShaderFactory::createFromSource(ShaderType::FRAGMENT_SHADER, defaultFS_3D));
-		return createFromShaders(shaders);
-	}
-
-	std::unique_ptr<ShaderProgram> ShaderProgramFactory::createDefaultGBufferProgram() {
-		std::vector<std::unique_ptr<Shader>> shaders;
-		shaders.emplace_back(ShaderFactory::createFromSource(ShaderType::VERTEX_SHADER, defaultVS_GBuffer));
-		shaders.emplace_back(ShaderFactory::createFromSource(ShaderType::FRAGMENT_SHADER, defaultFS_GBuffer));
+		shaders.emplace_back(ShaderFactory::createFromSource(ShaderType::VERTEX_SHADER, defaultVS));
+		shaders.emplace_back(ShaderFactory::createFromSource(ShaderType::FRAGMENT_SHADER, defaultFS));
 		return createFromShaders(shaders);
 	}
 

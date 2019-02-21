@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-namespace winter {
+namespace sprout {
 
     class Joystick final {
 

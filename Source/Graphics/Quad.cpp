@@ -1,7 +1,7 @@
 #include "Graphics/Quad.h"
 #include "Factory/MeshFactory.h"
 
-namespace winter {
+namespace sprout {
 
     std::unique_ptr<Mesh> Quad::createMesh(float width, float height) {
         std::vector<VertexAttribute> attributes = {

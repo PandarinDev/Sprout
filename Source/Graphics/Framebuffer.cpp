@@ -1,6 +1,6 @@
 #include "Graphics/Framebuffer.h"
 
-namespace winter {
+namespace sprout {
 
 	Framebuffer::Framebuffer(
 		GLuint handle,

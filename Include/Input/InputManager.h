@@ -14,7 +14,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-namespace winter {
+namespace sprout {
 
     enum class KeyEvent {
         KEY_DOWN,

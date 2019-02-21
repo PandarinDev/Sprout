@@ -4,7 +4,7 @@
 
 #include <string>
 
-namespace winter {
+namespace sprout {
 
 	class Window final {
 

@@ -2,7 +2,7 @@
 
 #include "External/glad.h"
 
-namespace winter {
+namespace sprout {
 
 	enum class ShaderType : GLenum {
 		VERTEX_SHADER = GL_VERTEX_SHADER,

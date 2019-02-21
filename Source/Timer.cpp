@@ -2,7 +2,7 @@
 
 #include <GLFW/glfw3.h>
 
-namespace winter {
+namespace sprout {
 
     Timer::Timer() : frames(0), fps(0), delta(0.0f) {
         float time = getTime();

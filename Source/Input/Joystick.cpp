@@ -1,6 +1,6 @@
 #include "Input/Joystick.h"
 
-namespace winter {
+namespace sprout {
 
     Joystick::Joystick(Id id, const std::string& name) :
         id(id), name(name) {}

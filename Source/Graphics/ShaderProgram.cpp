@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-namespace winter {
+namespace sprout {
 
 	ShaderProgram::ShaderProgram(GLuint handle) : handle(handle) {}
 

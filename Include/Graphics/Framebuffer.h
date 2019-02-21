@@ -8,7 +8,7 @@
 #include <type_traits>
 #include <unordered_map>
 
-namespace winter {
+namespace sprout {
 
 	enum class FramebufferTexture {
 		POSITION,

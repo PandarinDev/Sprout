@@ -1,6 +1,6 @@
 #include "Graphics/Texture.h"
 
-namespace winter {
+namespace sprout {
 
 	Texture::Texture(GLuint handle, int width, int height)
 		: handle(handle), width(width), height(height) {}

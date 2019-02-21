@@ -9,7 +9,7 @@
 #include <cstdint>
 #include <string_view>
 
-namespace winter {
+namespace sprout {
 
     /**
      * Reads a fixed number of characters from the buffer starting at the given offset.

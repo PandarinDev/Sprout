@@ -1,6 +1,6 @@
 #include "Graphics/Shader.h"
 
-namespace winter {
+namespace sprout {
 
 	Shader::Shader(GLuint handle) : handle(handle) {}
 

@@ -2,23 +2,20 @@
 #include "Graphics/Quad.h"
 #include "Utility/OGLUtils.h"
 #include "External/glad.h"
-#include "Factory/MeshFactory.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <string>
 #include <stdexcept>
 
-namespace winter {
+namespace sprout {
 
 	constexpr const char* Renderer::PROJECTION_MATRIX_UNIFORM;
 	constexpr const char* Renderer::MODELVIEW_MATRIX_UNIFORM;
 
 	Renderer::Renderer(
 		const glm::vec3& clearColor,
-		std::unique_ptr<ShaderProgram> shader2D,
-		std::unique_ptr<ShaderProgram> shader3D,
-		std::unique_ptr<ShaderProgram> shaderGBuffer,
+		std::unique_ptr<ShaderProgram> shader,
 		std::unique_ptr<Font> font,
 		std::unique_ptr<Framebuffer> gBuffer,
 		std::unique_ptr<Texture> defaultTexture,
@@ -27,47 +24,27 @@ namespace winter {
 		float perspectiveHeight,
 		float perspectiveNear,
 		float perspectiveFar) :
-			projectionMatrix2D(glm::ortho(0.0f, perspectiveWidth, 0.0f, perspectiveHeight)),
-			projectionMatrix3D(glm::perspective(fieldOfView, perspectiveWidth / perspectiveHeight, perspectiveNear, perspectiveFar)),
-			modelViewMatrix(glm::mat4(1.0f)), gBuffer(std::move(gBuffer)), defaultTexture(std::move(defaultTexture)) {
+			projectionMatrix(glm::ortho(0.0f, perspectiveWidth, 0.0f, perspectiveHeight)),
+			modelViewMatrix(glm::mat4(1.0f)) {
 		configureDefaults();
 		setClearColor(clearColor);
-		setShaderProgram2D(std::move(shader2D));
-		setShaderProgram3D(std::move(shader3D));
-		this->shaderGBuffer = std::move(shaderGBuffer);
+		setShaderProgram(std::move(shader));
 		setFont(std::move(font));
-		gBufferQuad = Quad::createMesh(perspectiveWidth, perspectiveHeight);
-		lightSphere = MeshFactory::loadFile(MeshFormat::OBJ, "Assets/Meshes/Sphere.obj");
 	}
 
 	void Renderer::beginFrame() {
-		glEnable(GL_DEPTH_TEST);
-		glBindFramebuffer(GL_FRAMEBUFFER, gBuffer->getHandle());
 		clearBuffers();
 	}
 
 	void Renderer::endFrame() {
-		glDisable(GL_DEPTH_TEST);
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		clearBuffers();
-
-		gBuffer->getTexture(FramebufferTexture::POSITION).use(0);
-		gBuffer->getTexture(FramebufferTexture::NORMAL).use(1);
-		gBuffer->getTexture(FramebufferTexture::COLOR).use(2);
-		glBindVertexArray(gBufferQuad->getVertexArrayObject());
-		shaderGBuffer->use();
-		projectionMatrixLocation = shaderGBuffer->getUniformLocation(PROJECTION_MATRIX_UNIFORM);
-		shaderGBuffer->uploadMatrix(projectionMatrixLocation, projectionMatrix2D);
-		glDrawArrays(GL_TRIANGLES, 0, gBufferQuad->getNumberOfIndices());
-
-		shader2D->use();
-		projectionMatrixLocation = shader2D->getUniformLocation(PROJECTION_MATRIX_UNIFORM);
-		modelViewMatrixLocation = shader2D->getUniformLocation(MODELVIEW_MATRIX_UNIFORM);
+		shader->use();
+		projectionMatrixLocation = shader->getUniformLocation(PROJECTION_MATRIX_UNIFORM);
+		modelViewMatrixLocation = shader->getUniformLocation(MODELVIEW_MATRIX_UNIFORM);
 		for (const auto& text : textBuffer) {
 			glBindVertexArray(text->getMesh().getVertexArrayObject());
 			text->getTexture().use(0);
-			shader2D->uploadMatrix(projectionMatrixLocation, projectionMatrix2D);
-			shader2D->uploadMatrix(modelViewMatrixLocation, text->getMesh().getTransformations());
+			shader->uploadMatrix(projectionMatrixLocation, projectionMatrix);
+			shader->uploadMatrix(modelViewMatrixLocation, text->getMesh().getTransformations());
 			glDrawArrays(GL_TRIANGLES, 0, text->getMesh().getNumberOfIndices());
 		}
 		textBuffer.clear();
@@ -82,55 +59,24 @@ namespace winter {
 		textBuffer.emplace_back(text);
 	}
 
-	void Renderer::render(const Mesh& mesh) {
-		glEnable(GL_DEPTH_TEST);
-		glBindVertexArray(mesh.getVertexArrayObject());
-		shader3D->use();
-		defaultTexture->use(0);
-		auto projectionMatrixLocation = shader3D->getUniformLocation("u_ProjectionMatrix");
-		auto modelMatrixLocation = shader3D->getUniformLocation("u_ModelMatrix");
-		auto viewMatrixLocation = shader3D->getUniformLocation("u_ViewMatrix");
-		shader3D->uploadMatrix(projectionMatrixLocation, projectionMatrix3D);
-		shader3D->uploadMatrix(modelMatrixLocation, mesh.getTransformations());
-		shader3D->uploadMatrix(viewMatrixLocation, camera.calculateTransformationMatrix());
-		glDrawArrays(GL_TRIANGLES, 0, mesh.getNumberOfIndices());
-		checkForErrors();
-	}
-
-	void Renderer::addPointLight(std::unique_ptr<PointLight> pointLight) {
-		pointLights.emplace_back(std::move(pointLight));
-	}
-
 	Camera& Renderer::getCamera() {
 		return camera;
 	}
 
-	const ShaderProgram& Renderer::getShaderProgram2D() const {
-		return *shader2D;
-	}
-
-	const ShaderProgram& Renderer::getShaderProgram3D() const {
-		return *shader3D;
+	const ShaderProgram& Renderer::getShaderProgram() const {
+		return *shader;
 	}
 
 	const Font& Renderer::getFont() const {
 		return *font;
 	}
 
-	const std::vector<std::unique_ptr<PointLight>>& Renderer::getPointLights() const {
-		return pointLights;
-	}
-
 	void Renderer::setClearColor(const glm::vec3& clearColor) {
 		glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
 	}
 
-	void Renderer::setShaderProgram2D(std::unique_ptr<winter::ShaderProgram> shader) {
-		this->shader2D = std::move(shader);
-	}
-
-	void Renderer::setShaderProgram3D(std::unique_ptr<ShaderProgram> shader) {
-		this->shader3D = std::move(shader);
+	void Renderer::setShaderProgram(std::unique_ptr<ShaderProgram> shader) {
+		this->shader = std::move(shader);
 	}
 
 	void Renderer::setFont(std::unique_ptr<Font> font) {

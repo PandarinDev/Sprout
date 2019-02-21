@@ -2,7 +2,7 @@
 
 #include <type_traits>
 
-namespace winter {
+namespace sprout {
 
 	class TypeUtils final {
 

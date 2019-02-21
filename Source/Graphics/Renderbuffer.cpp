@@ -1,6 +1,6 @@
 #include "Graphics/Renderbuffer.h"
 
-namespace winter {
+namespace sprout {
 
 	Renderbuffer::Renderbuffer(GLuint handle) : handle(handle) {}
 

@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace winter {
+namespace sprout {
 
     class FileUtils final {
 

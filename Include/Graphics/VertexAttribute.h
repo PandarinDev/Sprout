@@ -1,6 +1,6 @@
 #pragma once
 
-namespace winter {
+namespace sprout {
 
     class VertexAttribute final {
 

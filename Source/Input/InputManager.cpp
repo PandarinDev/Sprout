@@ -4,7 +4,7 @@
 
 #include <algorithm>
 
-namespace winter {
+namespace sprout {
 
     InputManager::InputManager() :
         mousePosition(0.0f, 0.0f),

@@ -3,7 +3,7 @@
 
 #include <stdexcept>
 
-namespace winter {
+namespace sprout {
 
 	std::unique_ptr<Texture> TextureFactory::createFromFile(const std::string& filePath) {
 		GLuint handle;

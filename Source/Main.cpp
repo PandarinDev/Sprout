@@ -1,9 +1,9 @@
 #include "Engine.h"
 
 int main(int argc, char** argv) {
-	using namespace winter;
+	using namespace sprout;
 	Configuration config = {
-		"Winter v0.1", 1600, 900, true, false, // Window configuration
+		"Sprout v0.1", 1600, 900, true, false, // Window configuration
 		60.0f, 0.1f, 100.0f // Renderer configuration
 	};
 

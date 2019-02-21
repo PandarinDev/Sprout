@@ -12,7 +12,7 @@
 
 #include <memory>
 
-namespace winter {
+namespace sprout {
 
     class Engine final {
 

@@ -8,7 +8,7 @@
 
 #include <glm/glm.hpp>
 
-namespace winter {
+namespace sprout {
 
     Engine& Engine::getInstance() {
         static Engine instance;
@@ -29,9 +29,7 @@ namespace winter {
         initGLAD();
         renderer = std::make_unique<Renderer>(
             glm::vec3(0.1f, 0.5f, 0.95f),
-            ShaderProgramFactory::createDefault2DProgram(),
-		    ShaderProgramFactory::createDefault3DProgram(),
-            ShaderProgramFactory::createDefaultGBufferProgram(),
+            ShaderProgramFactory::createDefaultProgram(),
             FontFactory::createFromFile("Assets/Fonts/Roboto/roboto.fnt"),
             FramebufferFactory::createGBuffer(config.windowWidth, config.windowHeight),
             TextureFactory::createFromFile("Assets/Textures/Default.png"),

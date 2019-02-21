@@ -6,7 +6,7 @@
 
 #include <memory>
 
-namespace winter {
+namespace sprout {
 
     class DefaultScene final : public Scene {
 
@@ -19,7 +19,6 @@ namespace winter {
     private:
 
         Renderer& renderer;
-        std::unique_ptr<Mesh> dragonPtr;
         std::shared_ptr<Text> textPtr;
 
     };

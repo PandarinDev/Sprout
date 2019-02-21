@@ -5,7 +5,7 @@
 
 #include <memory>
 
-namespace winter {
+namespace sprout {
 
 	class Text final {
 

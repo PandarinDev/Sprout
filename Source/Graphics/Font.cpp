@@ -1,7 +1,7 @@
 #include "Graphics/Font.h"
 #include "Factory/MeshFactory.h"
 
-namespace winter {
+namespace sprout {
 
     Font::Font(const std::string &name, short size, unsigned short lineHeight, unsigned short base,
                std::unique_ptr<Texture> texture,
@@ -88,11 +88,11 @@ namespace winter {
         return *texture;
     }
 
-    const FontChar& Font::getFontChar(winter::FontChar::Id id) const {
+    const FontChar& Font::getFontChar(FontChar::Id id) const {
         return characters.at(id);
     }
 
-    short Font::getKerningForPair(winter::FontChar::Id first, winter::FontChar::Id second) const {
+    short Font::getKerningForPair(FontChar::Id first, FontChar::Id second) const {
         return kernings.at(std::make_pair(first, second));
     }
 

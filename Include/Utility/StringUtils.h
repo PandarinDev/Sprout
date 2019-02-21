@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-namespace winter {
+namespace sprout {
 
     class StringUtils final {
 

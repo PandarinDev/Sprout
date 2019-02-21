@@ -3,7 +3,7 @@
 
 #include <stdexcept>
 
-namespace winter {
+namespace sprout {
 
 	std::unique_ptr<Framebuffer> FramebufferFactory::createGBuffer(int width, int height) {
 		GLuint handle;
@@ -32,7 +32,6 @@ namespace winter {
 		GLuint texture;
 		glCreateTextures(GL_TEXTURE_2D, 1, &texture);
 		glTextureStorage2D(texture, 1, GL_RGBA8, width, height);
-		glTextureSubImage2D(texture, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 		glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glNamedFramebufferTexture(fbo, GL_COLOR_ATTACHMENT0 + attachmentLevel, texture, 0);

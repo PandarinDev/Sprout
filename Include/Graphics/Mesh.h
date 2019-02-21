@@ -6,7 +6,7 @@
 
 #include <cstddef>
 
-namespace winter {
+namespace sprout {
 
     enum class MeshFormat {
         OBJ

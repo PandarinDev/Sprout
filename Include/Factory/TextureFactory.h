@@ -5,7 +5,7 @@
 #include <string>
 #include <memory>
 
-namespace winter {
+namespace sprout {
 
 	class TextureFactory final {
 
