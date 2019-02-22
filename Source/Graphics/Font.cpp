@@ -1,5 +1,4 @@
 #include "Graphics/Font.h"
-#include "Factory/MeshFactory.h"
 
 namespace sprout {
 
@@ -11,8 +10,7 @@ namespace sprout {
                characters(std::move(characters)), kernings(std::move(kernings)) {}
 
 	std::unique_ptr<Text> Font::generateText(const std::string& content) const {
-		static constexpr auto verticesPerCharacter = 24;
-		std::vector<float> vertexBuffer(content.size() * verticesPerCharacter);
+		std::vector<float> vertexBuffer(content.size() * Text::VERTICES_PER_CHARACTER);
 		std::size_t counter = 0;
 		float cursorX = 0.0f, cursorY = 0.0f;
 		float textureWidth = texture->getWidth();
@@ -27,31 +25,49 @@ namespace sprout {
 			vertexBuffer[counter++] = y;
 			vertexBuffer[counter++] = fontChar.x / textureWidth;
 			vertexBuffer[counter++] = 1.0f - ((fontChar.y + fontChar.height) / textureHeight);
+			vertexBuffer[counter++] = 1.0f;
+			vertexBuffer[counter++] = 1.0f;
+			vertexBuffer[counter++] = 1.0f;
 
 			vertexBuffer[counter++] = x + fontChar.width;
 			vertexBuffer[counter++] = y;
 			vertexBuffer[counter++] = (fontChar.x + fontChar.width) / textureWidth;
 			vertexBuffer[counter++] = 1.0f - ((fontChar.y + fontChar.height) / textureHeight);
+			vertexBuffer[counter++] = 1.0f;
+			vertexBuffer[counter++] = 1.0f;
+			vertexBuffer[counter++] = 1.0f;
 
 			vertexBuffer[counter++] = x + fontChar.width;
 			vertexBuffer[counter++] = y + fontChar.height;
 			vertexBuffer[counter++] = (fontChar.x + fontChar.width) / textureWidth;
 			vertexBuffer[counter++] = 1.0f - (fontChar.y / textureHeight);
+			vertexBuffer[counter++] = 1.0f;
+			vertexBuffer[counter++] = 1.0f;
+			vertexBuffer[counter++] = 1.0f;
 			// Upper left triangle
 			vertexBuffer[counter++] = x;
 			vertexBuffer[counter++] = y;
 			vertexBuffer[counter++] = fontChar.x / textureWidth;
 			vertexBuffer[counter++] = 1.0f - ((fontChar.y + fontChar.height) / textureHeight);
+			vertexBuffer[counter++] = 1.0f;
+			vertexBuffer[counter++] = 1.0f;
+			vertexBuffer[counter++] = 1.0f;
 
 			vertexBuffer[counter++] = x + fontChar.width;
 			vertexBuffer[counter++] = y + fontChar.height;
 			vertexBuffer[counter++] = (fontChar.x + fontChar.width) / textureWidth;
 			vertexBuffer[counter++] = 1.0f - (fontChar.y / textureHeight);
+			vertexBuffer[counter++] = 1.0f;
+			vertexBuffer[counter++] = 1.0f;
+			vertexBuffer[counter++] = 1.0f;
 
 			vertexBuffer[counter++] = x;
 			vertexBuffer[counter++] = y + fontChar.height;
 			vertexBuffer[counter++] = fontChar.x / textureWidth;
 			vertexBuffer[counter++] = 1.0f - (fontChar.y / textureHeight);
+			vertexBuffer[counter++] = 1.0f;
+			vertexBuffer[counter++] = 1.0f;
+			vertexBuffer[counter++] = 1.0f;
 
             cursorX += fontChar.xAdvance;
 			auto kerningIt = kernings.find(std::make_pair(lastChar, fontChar.id));
@@ -61,11 +77,7 @@ namespace sprout {
 			lastChar = fontChar.id;
 		}
 
-		std::vector<VertexAttribute> attributes = {
-                { 0, 2 }, // Geometry
-                { 1, 2 }  // Texture coordinates
-		};
-        return std::make_unique<Text>(MeshFactory::loadGeometry(vertexBuffer, attributes), texture);
+        return std::make_unique<Text>(std::move(vertexBuffer), texture);
 	}
 
     const std::string& Font::getName() const {

@@ -14,7 +14,7 @@ namespace sprout {
 
         DefaultScene(Renderer& renderer, InputManager& inputManager);
 
-        void tick() override;
+        void tick(const Timer& timer) override;
 
     private:
 

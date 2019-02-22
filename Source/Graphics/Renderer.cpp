@@ -1,5 +1,5 @@
 #include "Graphics/Renderer.h"
-#include "Graphics/Quad.h"
+#include "Graphics/VertexAttribute.h"
 #include "Utility/OGLUtils.h"
 #include "External/glad.h"
 
@@ -26,6 +26,7 @@ namespace sprout {
 		float perspectiveFar) :
 			projectionMatrix(glm::ortho(0.0f, perspectiveWidth, 0.0f, perspectiveHeight)),
 			modelViewMatrix(glm::mat4(1.0f)) {
+		configureBuffers();
 		configureDefaults();
 		setClearColor(clearColor);
 		setShaderProgram(std::move(shader));
@@ -37,16 +38,29 @@ namespace sprout {
 	}
 
 	void Renderer::endFrame() {
-		shader->use();
+		static constexpr auto componentsPerVertex = 7;
 		projectionMatrixLocation = shader->getUniformLocation(PROJECTION_MATRIX_UNIFORM);
 		modelViewMatrixLocation = shader->getUniformLocation(MODELVIEW_MATRIX_UNIFORM);
+		shader->use();
+		shader->uploadMatrix(projectionMatrixLocation, projectionMatrix);
+		shader->uploadMatrix(modelViewMatrixLocation, glm::mat4(1.0f));
+		// Count the number of total vertices
+		std::size_t totalVertices = 0;
 		for (const auto& text : textBuffer) {
-			glBindVertexArray(text->getMesh().getVertexArrayObject());
-			text->getTexture().use(0);
-			shader->uploadMatrix(projectionMatrixLocation, projectionMatrix);
-			shader->uploadMatrix(modelViewMatrixLocation, text->getMesh().getTransformations());
-			glDrawArrays(GL_TRIANGLES, 0, text->getMesh().getNumberOfIndices());
+			totalVertices += text->getVertices().size();
 		}
+		std::vector<float> vertexBuffer;
+		vertexBuffer.reserve(totalVertices);
+		// Concatenate vertex buffers
+		glBindVertexArray(vertexArrayObject);
+		for (const auto& text : textBuffer) {
+			text->getTexture().use(0);
+			const auto& vertices = text->getVertices();
+			vertexBuffer.insert(vertexBuffer.end(), vertices.begin(), vertices.end());
+		}
+		// Upload and draw
+		glNamedBufferData(vertexBufferObject, vertexBuffer.size() * sizeof(float), vertexBuffer.data(), GL_STREAM_DRAW);
+		glDrawArrays(GL_TRIANGLES, 0, vertexBuffer.size() / componentsPerVertex);
 		textBuffer.clear();
 		checkForErrors();
 	}
@@ -81,6 +95,28 @@ namespace sprout {
 
 	void Renderer::setFont(std::unique_ptr<Font> font) {
         this->font = std::move(font);
+	}
+
+	void Renderer::configureBuffers() {
+		static const std::vector<VertexAttribute> attributes = {
+			{ 0, 2 }, // Coordinates
+			{ 1, 2 }, // Texture coordinates
+			{ 2, 3 }  // Colors
+		};
+
+		glCreateVertexArrays(1, &vertexArrayObject);
+		glCreateBuffers(1, &vertexBufferObject);
+		unsigned totalStride = 0;
+		for (const auto& attribute : attributes) totalStride += attribute.components * sizeof(float);
+		glVertexArrayVertexBuffer(vertexArrayObject, 0, vertexBufferObject, 0, totalStride);
+		// Enable and describe vertex array attributes
+		unsigned stride = 0;
+		for (const auto& attribute : attributes) {
+		    glEnableVertexArrayAttrib(vertexArrayObject, attribute.index);
+		    glVertexArrayAttribFormat(vertexArrayObject, attribute.index, attribute.components, GL_FLOAT, GL_FALSE, stride);
+		    glVertexArrayAttribBinding(vertexArrayObject, attribute.index, 0);
+		    stride += attribute.components * sizeof(float);
+		}
 	}
 
 	void Renderer::configureDefaults() const {

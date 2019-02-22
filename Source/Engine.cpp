@@ -24,13 +24,14 @@ namespace sprout {
             config.windowVSync,
             config.windowFullScreen);
         window->captureCursor();
+        timer = std::make_unique<Timer>();
         inputManager = std::make_unique<InputManager>();
         inputManager->hookInto(*window);
         initGLAD();
         renderer = std::make_unique<Renderer>(
             glm::vec3(0.1f, 0.5f, 0.95f),
             ShaderProgramFactory::createDefaultProgram(),
-            FontFactory::createFromFile("Assets/Fonts/Roboto/roboto.fnt"),
+            FontFactory::createFromFile("Assets/Fonts/ShareTech/sharetech.fnt"),
             FramebufferFactory::createGBuffer(config.windowWidth, config.windowHeight),
             TextureFactory::createFromFile("Assets/Textures/Default.png"),
 		    glm::radians(config.rendererFieldOfView),
@@ -44,10 +45,11 @@ namespace sprout {
     void Engine::start() {
         while (!window->shouldClose()) {
             window->pollEvents();
+            timer->tick();
             inputManager->tick();
             // Render and swap buffers
             renderer->beginFrame();
-            scene->tick();
+            scene->tick(*timer);
             renderer->endFrame();
             window->swapBuffers();
         }

@@ -6,6 +6,7 @@
 
 #include "Configuration.h"
 #include "Window.h"
+#include "Timer.h"
 #include "Input/InputManager.h"
 #include "Graphics/Renderer.h"
 #include "Scene.h"
@@ -27,6 +28,7 @@ namespace sprout {
         void start();
 
         Window& getWindow() const;
+        Timer& getTimer() const;
         InputManager& getInputManager() const;
         Renderer& getRenderer() const;
         Scene& getScene() const;
@@ -38,6 +40,7 @@ namespace sprout {
         Engine() = default;
 
         std::unique_ptr<Window> window;
+        std::unique_ptr<Timer> timer;
         std::unique_ptr<InputManager> inputManager;
         std::unique_ptr<Renderer> renderer;
         std::unique_ptr<Scene> scene;

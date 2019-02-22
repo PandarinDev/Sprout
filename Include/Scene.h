@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Timer.h"
+
 namespace sprout {
 
     class Scene {
@@ -7,7 +9,7 @@ namespace sprout {
     public:
 
         virtual ~Scene() = default;
-        virtual void tick() = 0;
+        virtual void tick(const Timer& timer) = 0;
 
     };
 

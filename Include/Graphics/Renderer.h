@@ -2,7 +2,6 @@
 
 #include "Graphics/Camera.h"
 #include "Graphics/ShaderProgram.h"
-#include "Graphics/Mesh.h"
 #include "Graphics/Font.h"
 #include "Graphics/Framebuffer.h"
 #include "Graphics/Texture.h"
@@ -35,7 +34,6 @@ namespace sprout {
 		void endFrame();
 		void clearBuffers() const;
 		void render(const std::shared_ptr<Text>& text);
-		void render(const Mesh& mesh);
 
 		Camera& getCamera();
 		const ShaderProgram& getShaderProgram() const;
@@ -58,8 +56,11 @@ namespace sprout {
 		std::unique_ptr<Font> font;
 		GLint projectionMatrixLocation;
 		GLint modelViewMatrixLocation;
+		GLuint vertexArrayObject;
+		GLuint vertexBufferObject;
 		std::vector<std::shared_ptr<Text>> textBuffer;
 
+		void configureBuffers();
 		void configureDefaults() const;
 		void checkForErrors() const;
 
