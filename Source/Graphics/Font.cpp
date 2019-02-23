@@ -17,9 +17,17 @@ namespace sprout {
 		float textureHeight = texture->getHeight();
 		FontChar::Id lastChar = -1u;
 		for (const auto c : content) {
-            auto fontChar = getFontChar(c);
+			// Handle new-line characters
+			if (c == '\n') {
+				cursorX = 0.0f;
+				cursorY += lineHeight;
+				lastChar = -1u;
+				continue;
+			}
+            const auto& fontChar = getFontChar(c);
 			float x = cursorX + fontChar.xOffset;
 			float y = cursorY;
+
 			// Bottom right triangle
 			vertexBuffer[counter++] = x;
 			vertexBuffer[counter++] = y;

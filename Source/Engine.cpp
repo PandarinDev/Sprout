@@ -4,7 +4,7 @@
 #include "Factory/FontFactory.h"
 #include "Factory/TextureFactory.h"
 #include "Factory/FramebufferFactory.h"
-#include "Scenes/DefaultScene.h"
+#include "Map.h"
 
 #include <glm/glm.hpp>
 
@@ -23,13 +23,12 @@ namespace sprout {
             config.windowHeight,
             config.windowVSync,
             config.windowFullScreen);
-        window->captureCursor();
         timer = std::make_unique<Timer>();
         inputManager = std::make_unique<InputManager>();
         inputManager->hookInto(*window);
         initGLAD();
         renderer = std::make_unique<Renderer>(
-            glm::vec3(0.1f, 0.5f, 0.95f),
+            glm::vec3(0.0f, 0.0f, 0.0f),
             ShaderProgramFactory::createDefaultProgram(),
             FontFactory::createFromFile("Assets/Fonts/ShareTech/sharetech.fnt"),
             FramebufferFactory::createGBuffer(config.windowWidth, config.windowHeight),
@@ -39,7 +38,7 @@ namespace sprout {
             config.windowHeight,
             config.rendererDrawClose,
             config.rendererDrawDistance);
-        scene = std::make_unique<DefaultScene>(getRenderer(), getInputManager());
+        scene = std::make_unique<Map>(20, 20, getRenderer());
     }
 
     void Engine::start() {
