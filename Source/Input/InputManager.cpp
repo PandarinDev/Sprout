@@ -22,22 +22,22 @@ namespace sprout {
 		static const auto keyDownValue = TypeUtils::enumValue(KeyEvent::KEY_DOWN);
         static const auto keyUpValue = TypeUtils::enumValue(KeyEvent::KEY_UP);
         // Handle keyboard events
-		auto downListeners = eventListeners.find(keyDownValue);
-        auto upListeners = eventListeners.find(keyUpValue);
-        if (downListeners != eventListeners.end()) {
-            for (auto key : keysDown) {
-                for (const auto& listener : downListeners->second) {
-                    listener->handleKeyEvent(key);
-                }
+		for (const auto& listener : keyListeners) {
+            // Handle key-down events
+            for (const auto& key : keysDown) {
+                listener->keyDown(key);
+            }
+            // Handle key-held events
+            for (const auto& key : keysHeld) {
+                listener->keyHeld(key);
+            }
+            // Handle key-up events
+            for (const auto& key : keysUp) {
+                listener->keyUp(key);
             }
         }
-        if (upListeners != eventListeners.end()) {
-            for (auto key : keysUp) {
-                for (const auto& listener : upListeners->second) {
-                    listener->handleKeyEvent(key);
-                }
-            }
-        }
+        keysHeld.insert(keysDown.begin(), keysDown.end());
+        keysDown.clear();
         keysUp.clear();
 
 		// Handle mouse events
@@ -48,7 +48,7 @@ namespace sprout {
 
         // Handle joystick events
         for (const auto& joystickEntry : joysticks) {
-            
+            // TODO
         }
     }
 
@@ -57,16 +57,8 @@ namespace sprout {
 		window.setMouseCallback(mouseCallback);
     }
 
-    void InputManager::registerKeyEventListener(KeyEvent event, std::unique_ptr<KeyEventListener> eventListener) {
-        auto eventValue = TypeUtils::enumValue(event);
-        auto it = eventListeners.find(eventValue);
-        if (it == eventListeners.end()) {
-            it = eventListeners.emplace(
-                std::piecewise_construct,
-                std::forward_as_tuple(eventValue),
-                std::forward_as_tuple()).first;
-        }
-        it->second.emplace_back(std::move(eventListener));
+    void InputManager::registerKeyEventListener(std::unique_ptr<KeyEventListener> eventListener) {
+        keyListeners.emplace_back(std::move(eventListener));
     }
 
 	void InputManager::registerMouseEventListener(std::unique_ptr<MouseEventListener> eventListener) {
@@ -94,6 +86,7 @@ namespace sprout {
             break;
         case GLFW_RELEASE:
             instance.keysDown.erase(key);
+            instance.keysHeld.erase(key);
             instance.keysUp.emplace(key);
             break;
         }

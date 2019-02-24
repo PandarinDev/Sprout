@@ -17,7 +17,7 @@ namespace sprout {
         Map(int width, int height, Renderer& renderer, InputManager& inputManager);
 
         void tick(const Timer& timer) override;
-        void addEntity(std::unique_ptr<Entity> entity);
+        void addEntity(const std::shared_ptr<Entity>& entity);
 
         const Tile& getTileAt(int x, int y) const;        
 
@@ -28,7 +28,7 @@ namespace sprout {
         Renderer& renderer;
         InputManager& inputManager;
         std::vector<std::vector<Tile>> tiles;
-        std::vector<std::unique_ptr<Entity>> entities;
+        std::vector<std::shared_ptr<Entity>> entities;
 
     };
 

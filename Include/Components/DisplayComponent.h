@@ -2,6 +2,8 @@
 
 #include "Component.h"
 
+#include <glm/vec3.hpp>
+
 #include <string>
 
 namespace sprout {
@@ -13,8 +15,11 @@ namespace sprout {
         static const std::string UID;
 
         char representation;
+        glm::vec3 color;
 
-        DisplayComponent(char representation);
+        DisplayComponent(
+            char representation,
+            const glm::vec3& color);
 
     };
 

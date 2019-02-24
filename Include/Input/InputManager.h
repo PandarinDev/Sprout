@@ -26,7 +26,9 @@ namespace sprout {
 
 	struct KeyEventListener {
 		virtual ~KeyEventListener() = default;
-		virtual void handleKeyEvent(KeyType key) = 0;
+		virtual void keyDown(KeyType key) = 0;
+        virtual void keyHeld(KeyType key) = 0;
+        virtual void keyUp(KeyType key) = 0;
 	};
 
 	struct MouseEventListener {
@@ -54,7 +56,7 @@ namespace sprout {
 
         void tick();
         void hookInto(const Window& window);
-        void registerKeyEventListener(KeyEvent event, std::unique_ptr<KeyEventListener> eventListener);
+        void registerKeyEventListener(std::unique_ptr<KeyEventListener> eventListener);
 		void registerMouseEventListener(std::unique_ptr<MouseEventListener> eventListener);
         void registerJoystickEventListener(std::unique_ptr<JoystickEventListener> eventListener);
 
@@ -64,9 +66,10 @@ namespace sprout {
 		glm::vec2 mousePosition;
 		glm::vec2 lastMousePosition;
         std::unordered_map<Joystick::Id, std::unique_ptr<Joystick>> joysticks;
-        std::unordered_map<KeyEventType, std::vector<std::unique_ptr<KeyEventListener>>> eventListeners;
         std::unordered_set<KeyType> keysDown;
+        std::unordered_set<KeyType> keysHeld;
         std::unordered_set<KeyType> keysUp;
+        std::vector<std::unique_ptr<KeyEventListener>> keyListeners;
 		std::vector<std::unique_ptr<MouseEventListener>> mouseListeners;
         std::vector<std::unique_ptr<JoystickEventListener>> joystickListeners;
 

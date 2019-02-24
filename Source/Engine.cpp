@@ -38,7 +38,7 @@ namespace sprout {
             config.windowHeight,
             config.rendererDrawClose,
             config.rendererDrawDistance);
-        scene = std::make_unique<Map>(20, 20, getRenderer());
+        scene = std::make_unique<Map>(20, 20, getRenderer(), getInputManager());
     }
 
     void Engine::start() {
